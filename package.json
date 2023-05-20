@@ -1,0 +1,68 @@
+{
+  "name": "next-blogging",
+  "version": "0.1.0",
+  "private": true,
+  "author": {
+    "name": "Niraj Thakur",
+    "email": "ntnirajthakur21@gmail.com",
+    "url": "https://nirajthakur.com.np",
+    "organization": "Scholarsspace",
+    "organizationUrl": "scholarsspace.com",
+    "role": "Frontend Developer",
+    "timezone": "Asia/Kathmandu",
+    "github": "https://github.com/ntnirajthakur21",
+    "linkedin": "https://www.linkedin.com/in/developerniraj/",
+    "facebook": "https://www.facebook.com/developer.niraj/",
+    "bio": "I am a Full Stack Developer with 3+ years of experience in building web applications. I have worked with various technologies like React, Next.js, Node.js, Express.js, MongoDB, MySQL, etc. I am also a tech blogger and I write blogs on various topics related to web development. I am also a tech enthusiast and I love to learn new technologies."},
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^2.5.1",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "@tanstack/react-query": "^4.29.7",
+    "axios": "^1.4.0",
+    "eslint": "8.41.0",
+    "eslint-config-next": "13.4.3",
+    "framer-motion": "^10.12.12",
+    "next": "13.4.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.9",
+    "swiper": "^9.3.2",
+    "yup": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.2.1",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
+    "typescript": "5.0.4"
+  },
+  "engines": {
+    "node": "16.15.0",
+    "npm": "8.5.5",
+    "yarn": "1.22.19"
+  },
+  "license": "MIT",
+  "description": "A Next.js starter for blogging with Chakra UI",
+  "keywords": [
+    "nextjs",
+    "next",
+    "chakra-ui",
+    "chakra",
+    "blog",
+    "blogging",
+    "starter",
+    "template",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ntnirajthakur21/next-blog"
+  },
+  "homepage": ""
+}
