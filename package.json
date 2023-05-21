@@ -13,12 +13,15 @@
     "github": "https://github.com/ntnirajthakur21",
     "linkedin": "https://www.linkedin.com/in/developerniraj/",
     "facebook": "https://www.facebook.com/developer.niraj/",
-    "bio": "I am a Full Stack Developer with 3+ years of experience in building web applications. I have worked with various technologies like React, Next.js, Node.js, Express.js, MongoDB, MySQL, etc. I am also a tech blogger and I write blogs on various topics related to web development. I am also a tech enthusiast and I love to learn new technologies."},
+    "bio": "I am a Full Stack Developer with 3+ years of experience in building web applications. I have worked with various technologies like React, Next.js, Node.js, Express.js, MongoDB, MySQL, etc. I am also a tech blogger and I write blogs on various topics related to web development. I am also a tech enthusiast and I love to learn new technologies."
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next export -o build/",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gen:theme-typings": "chakra-cli tokens theme/index.ts --out theme/chakra.d.ts",
+    "postinstall": "npm run gen:theme-typings"
   },
   "dependencies": {
     "@chakra-ui/react": "^2.5.1",
@@ -33,13 +36,16 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.43.9",
+    "react-icons": "^4.8.0",
     "swiper": "^9.3.2",
     "yup": "^1.1.1"
   },
   "devDependencies": {
+    "@chakra-ui/cli": "^2.4.1",
     "@types/node": "20.2.1",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
+    "prettier": "^2.8.8",
     "typescript": "5.0.4"
   },
   "engines": {

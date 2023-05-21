@@ -40,3 +40,7 @@ next-env.d.ts
 .env.local
 .env.development
 .env.production
+
+
+#type declaration files
+*.d.ts
