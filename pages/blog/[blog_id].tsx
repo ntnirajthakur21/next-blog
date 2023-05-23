@@ -4,8 +4,6 @@ import {
     Text,
     Flex,
     SimpleGrid,
-    Stack,
-    Icon,
     Tag,
     Button,
     Avatar,
@@ -20,12 +18,10 @@ import {
     Textarea,
 } from '@chakra-ui/react';
 import React, { Fragment } from 'react';
-import { category } from '..';
 import { useRouter } from 'next/router';
-import { AiOutlineRight } from 'react-icons/ai';
-import Link from 'next/link';
 import Image from 'next/image';
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from 'react-icons/ai';
+import BlogRightSide from '@/components/Blog/BlogRightSide';
 
 const BlogDetail = () => {
     const router = useRouter();
@@ -52,11 +48,8 @@ const BlogDetail = () => {
                     </Flex>
                 </Flex>
 
-                <SimpleGrid templateColumns={{ sm: '1fr', md: '1.5fr 1fr', '2xl': '1.5fr 1fr' }} gap={2}>
-                    <Box w="100%">
-                        <Text bg="blackAlpha.900" textAlign="center" p={3} fontSize="2xl" color="white">
-                            Latest
-                        </Text>
+                <SimpleGrid templateColumns={{ sm: '1fr', md: '1.5fr 1fr', '2xl': '1.5fr 1fr' }} gap={2} my={2}>
+                    <Box w="100%" bg="blackAlpha.100" p={3}>
                         <Box w="100%" minH={{ sm: '30rem', md: '30rem' }} position="relative" overflow="hidden" my={3}>
                             <Image
                                 src="/blog2.jpg"
@@ -226,43 +219,7 @@ const BlogDetail = () => {
                         </Box>
                     </Box>
 
-                    <Box>
-                        <Text bg="blackAlpha.900" textAlign="center" p={3} fontSize="2xl" color="white">
-                            Categories
-                        </Text>
-
-                        <Stack>
-                            {category.map(({ slug, name }, i) => {
-                                return (
-                                    <Flex
-                                        px={5}
-                                        py={1}
-                                        alignItems="center"
-                                        justifyContent="space-between"
-                                        _hover={{
-                                            cursor: 'pointer',
-                                            color: 'blue.600',
-                                            '& > svg': {
-                                                transform: 'translateX(5px)',
-                                            },
-                                        }}
-                                        color={router.pathname === `/category/${slug}` ? 'green.500' : 'blue.400'}
-                                        as={Link}
-                                        href={`/category/${slug}`}
-                                        passHref
-                                    >
-                                        <Text fontSize="xl">{name}</Text>
-                                        <Icon
-                                            as={AiOutlineRight}
-                                            style={{
-                                                transition: 'all 0.3s linear',
-                                            }}
-                                        />
-                                    </Flex>
-                                );
-                            })}
-                        </Stack>
-                    </Box>
+                    <BlogRightSide showPopular />
                 </SimpleGrid>
             </Container>
         </Fragment>
