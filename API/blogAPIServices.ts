@@ -16,6 +16,13 @@ export type ISingleComment = {
     body: string;
 };
 
+export type IAddCommentPayload = {
+    firstName: string;
+    lastName: string;
+    email: string;
+    body: string;
+    postId: number;
+};
 // API endpoint have not been configured for pagination
 export const getAllBlogs = async (): Promise<AxiosResponse<ISingleBlog[], any>> =>
     await axios({
@@ -33,4 +40,11 @@ export const getBlogComments = async (id: string): Promise<AxiosResponse<ISingle
     await axios({
         method: 'GET',
         url: `${API_BASE_URL}/posts/${id}/comments`,
+    });
+
+export const addComment = async (payload: IAddCommentPayload): Promise<AxiosResponse<ISingleComment, any>> =>
+    await axios({
+        method: 'POST',
+        url: `${API_BASE_URL}/comments`,
+        data: payload,
     });
