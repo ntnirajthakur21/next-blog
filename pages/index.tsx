@@ -1,11 +1,11 @@
-import { Container, Flex, SimpleGrid, Text, chakra } from '@chakra-ui/react';
+import { Container, Flex, Text, chakra } from '@chakra-ui/react';
 import React, { Fragment, useEffect, useRef, useState } from 'react';
 import BlogListItem from '@/components/Blog/BlogListItem';
 import BlogLoadingSkeleton from '@/components/Skeleton/BlogLoadingSkeleton';
-import BlogRightSide from '@/components/Blog/BlogRightSide';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ISingleBlog, getAllBlogs } from '@/API/blogAPIServices';
 import BlogHeroSection from '@/components/Blog/BlogHeroSection';
+import BlogPageLayout from '@/components/Layout/BlogPageLayout/BlogPageLayout';
 
 const LandingPage = () => {
     const [blogsPerPage, _] = useState<number>(3);
@@ -56,23 +56,21 @@ const LandingPage = () => {
         <Fragment>
             <BlogHeroSection />
             <Container maxW="container.xl" as="section" my={5}>
-                <SimpleGrid templateColumns={{ sm: '1fr', md: '1.5fr 1fr', '2xl': '1.5fr 1fr' }} gap={2}>
+                <BlogPageLayout>
                     <Flex direction="column" gap={4} w="100%">
                         <Text bg="blackAlpha.900" textAlign="center" p={3} fontSize="2xl" color="white">
                             Latest
                         </Text>
 
-                        {blogs.map((_, i) => (
-                            <BlogListItem key={i} />
+                        {blogs.map((blog) => (
+                            <BlogListItem {...blog} key={blog.id} />
                         ))}
 
                         <chakra.span ref={blogListsEndRef} />
 
                         {(isLoading || isRefetching) && <BlogLoadingSkeleton />}
                     </Flex>
-
-                    <BlogRightSide showPopular />
-                </SimpleGrid>
+                </BlogPageLayout>
             </Container>
         </Fragment>
     );
