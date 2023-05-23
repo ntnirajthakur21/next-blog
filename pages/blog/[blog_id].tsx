@@ -67,17 +67,27 @@ const BlogDetail = () => {
                 </Flex>
 
                 <BlogPageLayout>
-                    <Box w="100%" bg="blackAlpha.100" p={3}>
-                        <Box w="100%" minH={{ sm: '30rem', md: '30rem' }} position="relative" overflow="hidden" my={3}>
+                    <Box width="100%" bg="blackAlpha.100" p={3}>
+                        <Box
+                            width="100%"
+                            height={{
+                                base: '15rem',
+                                sm: '20rem',
+                                md: '25rem',
+                                lg: '30rem',
+                                xl: '35rem',
+                                '2xl': '40rem',
+                            }}
+                            position="relative"
+                            overflow="hidden"
+                            my={3}
+                        >
                             <Image
                                 // Here we are using the blog id as the seed for the image
                                 src={`https://picsum.photos/seed/${blog_id}/500/500`}
                                 layout="fill"
                                 objectFit="cover"
                                 alt="blog 1"
-                                style={{
-                                    transition: 'all 0.3s linear',
-                                }}
                             />
                         </Box>
                         <Tag colorScheme="green" size="lg" variant="solid">
