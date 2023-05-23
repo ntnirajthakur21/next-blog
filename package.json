@@ -50,9 +50,9 @@
     "typescript": "5.0.4"
   },
   "engines": {
-    "node": "16.15.0",
-    "npm": "8.5.5",
-    "yarn": "1.22.19"
+    "node": "^16.15.0",
+    "npm": "^8.5.5",
+    "yarn": "^1.22.19"
   },
   "license": "MIT",
   "description": "A Next.js starter for blogging with Chakra UI",
