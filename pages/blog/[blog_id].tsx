@@ -9,6 +9,7 @@ import BlogComment from '@/components/Blog/BlogComment';
 import Link from 'next/link';
 import CommentForm from '@/components/Blog/CommentForm';
 import BlogPageLayout from '@/components/Layout/BlogPageLayout/BlogPageLayout';
+import { SEO } from '@/components/SEO';
 
 const BlogDetail = () => {
     const router = useRouter();
@@ -16,25 +17,34 @@ const BlogDetail = () => {
     const queryClient = useQueryClient();
 
     // Here we are using react-query to fetch the blog comments
-    const blogCommentsQuery = useQuery(['get-blog-comments'], async () => await getBlogComments(blog_id as string), {
-        // Here we are disabling the query if the blog id is not available
-        enabled: !!blog_id && typeof blog_id === 'string',
-    });
+    const blogCommentsQuery = useQuery(
+        ['get-blog-comments', blog_id as string],
+        async () => await getBlogComments(blog_id as string),
+        {
+            // Here we are disabling the query if the blog id is not available
+            enabled: blog_id !== undefined && typeof blog_id === 'string',
+        }
+    );
 
     // Here we are using react-query to fetch the blog content
-    const { isSuccess, data } = useQuery(['get-blog-content'], async () => await getSingleBlog(blog_id as string), {
-        // Here we are disabling the query if the blog id is not available
-        enabled: !!blog_id && typeof blog_id === 'string',
-    });
+    const { isSuccess, data } = useQuery(
+        ['get-blog-content', blog_id as string],
+        async () => await getSingleBlog(blog_id as string),
+        {
+            // Here we are disabling the query if the blog id is not available
+            enabled: blog_id !== undefined && typeof blog_id === 'string',
+        }
+    );
 
     // Here we are prefetching the data for the next page
     useEffect(() => {
-        queryClient.prefetchQuery(['get-blog-content']);
-        queryClient.prefetchQuery(['get-blog-comments']);
+        queryClient.prefetchQuery(['get-blog-content', blog_id as string]);
+        queryClient.prefetchQuery(['get-blog-comments', blog_id as string]);
     }, [router]);
 
     return (
         <Fragment>
+            <SEO title={`${data?.data?.title} | Next Blog`} description={data?.data?.body.slice(0, 100)} />
             <Container maxW="container.xl" as="section" my={5}>
                 <Flex
                     w="100%"
@@ -135,7 +145,7 @@ const BlogDetail = () => {
                             <Text fontWeight="bold" fontSize="2xl">
                                 Post a comment
                             </Text>
-                            <CommentForm />
+                            <CommentForm postId={Number(blog_id)} />
                         </Box>
                     </Box>
                 </BlogPageLayout>
