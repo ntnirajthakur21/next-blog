@@ -1,5 +1,5 @@
-const API_BASE_URL = process.env.NEXT_APP_API_BASE_URL;
-const PRODUCTION_URL = process.env.NEXT_APP_APP_BASE_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const PRODUCTION_URL = process.env.NEXT_PUBLIC_PRODUCTION_URL;
 const PORTAL_MAIN_CONTAINER_ID = 'portal-main-container';
 
 /**
