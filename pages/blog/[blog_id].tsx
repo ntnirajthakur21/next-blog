@@ -1,30 +1,38 @@
-import {
-    Box,
-    Container,
-    Text,
-    Flex,
-    SimpleGrid,
-    Tag,
-    Button,
-    Avatar,
-    Show,
-    Grid,
-    GridItem,
-    FormControl,
-    FormLabel,
-    InputGroup,
-    Input,
-    FormErrorMessage,
-    Textarea,
-} from '@chakra-ui/react';
-import React, { Fragment } from 'react';
+import { Box, Container, Text, Flex, Tag, Button } from '@chakra-ui/react';
+import React, { Fragment, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from 'react-icons/ai';
-import BlogRightSide from '@/components/Blog/BlogRightSide';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getBlogComments, getSingleBlog } from '@/API/blogAPIServices';
+import BlogComment from '@/components/Blog/BlogComment';
+import Link from 'next/link';
+import CommentForm from '@/components/Blog/CommentForm';
+import BlogPageLayout from '@/components/Layout/BlogPageLayout/BlogPageLayout';
 
 const BlogDetail = () => {
     const router = useRouter();
+    const { blog_id } = router.query;
+    const queryClient = useQueryClient();
+
+    // Here we are using react-query to fetch the blog comments
+    const blogCommentsQuery = useQuery(['get-blog-comments'], async () => await getBlogComments(blog_id as string), {
+        // Here we are disabling the query if the blog id is not available
+        enabled: !!blog_id && typeof blog_id === 'string',
+    });
+
+    // Here we are using react-query to fetch the blog content
+    const { isSuccess, data } = useQuery(['get-blog-content'], async () => await getSingleBlog(blog_id as string), {
+        // Here we are disabling the query if the blog id is not available
+        enabled: !!blog_id && typeof blog_id === 'string',
+    });
+
+    // Here we are prefetching the data for the next page
+    useEffect(() => {
+        queryClient.prefetchQuery(['get-blog-content']);
+        queryClient.prefetchQuery(['get-blog-comments']);
+    }, [router]);
+
     return (
         <Fragment>
             <Container maxW="container.xl" as="section" my={5}>
@@ -44,15 +52,16 @@ const BlogDetail = () => {
                     </Box>
 
                     <Flex gap={2} alignItems="center" fontSize="2xl">
-                        Home / Blog / Blog Detail
+                        Home
                     </Flex>
                 </Flex>
 
-                <SimpleGrid templateColumns={{ sm: '1fr', md: '1.5fr 1fr', '2xl': '1.5fr 1fr' }} gap={2} my={2}>
+                <BlogPageLayout>
                     <Box w="100%" bg="blackAlpha.100" p={3}>
                         <Box w="100%" minH={{ sm: '30rem', md: '30rem' }} position="relative" overflow="hidden" my={3}>
                             <Image
-                                src="/blog2.jpg"
+                                // Here we are using the blog id as the seed for the image
+                                src={`https://picsum.photos/seed/${blog_id}/500/500`}
                                 layout="fill"
                                 objectFit="cover"
                                 alt="blog 1"
@@ -66,161 +75,70 @@ const BlogDetail = () => {
                         </Tag>
 
                         <Text fontSize="2xl" fontWeight="bold" lineHeight={2}>
-                            Lorem ipsum dolor sit amet consectetur
+                            {data?.data?.title}
                         </Text>
 
                         <Flex fontSize="sm" fontWeight="bold" color="blackAlpha.600" gap={3} my={5}>
                             <Text>12/12/2021</Text>
-                            <Text>12/12/2021</Text>
+                            <Text>Admin</Text>
                         </Flex>
 
-                        <Box>
-                            <Text as="p">
-                                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam nostrum quae libero
-                                repudiandae, atque odio earum optio quis rem. Est esse voluptatibus eos saepe, ab
-                                placeat ipsa ut qui fugiat facere non error delectus beatae sunt sed harum. Deleniti
-                                consequuntur ducimus a, architecto hic necessitatibus pariatur rerum magni laborum
-                                obcaecati quisquam est quis perferendis suscipit doloremque, voluptatum nostrum maiores
-                                facere sit. Sequi ex ullam itaque iste veniam distinctio, nam quidem minus molestias
-                                mollitia earum id provident nobis modi animi dolorem doloribus. Reprehenderit maxime
-                                maiores provident explicabo asperiores sit accusantium consequatur omnis beatae tenetur
-                                ut saepe placeat quos iure, earum eaque doloribus sunt distinctio? Sunt pariatur
-                                voluptate officia maiores dolore ratione tempora rerum corporis architecto velit nam
-                                nobis voluptatibus alias quidem est dolores obcaecati praesentium explicabo modi,
-                                laudantium placeat! Cum id eum recusandae a iste soluta accusantium sed dolorem nulla
-                                sapiente laboriosam saepe eaque magni asperiores ipsa at ducimus voluptatum maiores
-                                tenetur voluptate atque, amet aperiam? Odit consequatur nostrum fuga est libero alias
-                                aperiam quibusdam, deserunt delectus soluta. Quae tempora repellat sint totam vel quod
-                                obcaecati nemo! Itaque consequatur suscipit, eaque veritatis minus doloribus eveniet
-                                impedit magni est quam neque dicta accusamus sequi laborum facilis voluptas unde
-                                adipisci distinctio omnis molestiae laboriosam natus officia. Totam reprehenderit
-                                eveniet cumque suscipit possimus, porro explicabo quidem aspernatur, illum nostrum,
-                                obcaecati recusandae? Cum quidem consequuntur ipsa porro quia sequi officiis, vel labore
-                                voluptatibus et. Eos dicta eligendi minima numquam fugiat, dolorum aut repellat beatae
-                                vero natus. Quo, quos voluptas obcaecati officia eligendi doloribus itaque id?
-                            </Text>
-                        </Box>
+                        {isSuccess && (
+                            <Box>
+                                <Text as="p">{data?.data?.body}</Text>
+                            </Box>
+                        )}
 
                         <Flex justifyContent="space-between" alignItems="center" my={3}>
-                            <Button variant="dark" px={5} py={3} leftIcon={<AiOutlineArrowLeft />}>
-                                Prev
-                            </Button>
+                            {Number(blog_id) > 1 && (
+                                <Button
+                                    variant="dark"
+                                    px={5}
+                                    py={3}
+                                    leftIcon={<AiOutlineArrowLeft />}
+                                    as={Link}
+                                    href={`/blog/${Number(blog_id) - 1}`}
+                                >
+                                    Prev
+                                </Button>
+                            )}
 
-                            <Button variant="dark" px={5} py={3} rightIcon={<AiOutlineArrowRight />}>
-                                Next
-                            </Button>
+                            {Number(blog_id) < 100 && (
+                                <Button
+                                    variant="dark"
+                                    px={5}
+                                    py={3}
+                                    rightIcon={<AiOutlineArrowRight />}
+                                    as={Link}
+                                    href={`/blog/${Number(blog_id) + 1}`}
+                                >
+                                    Next
+                                </Button>
+                            )}
                         </Flex>
 
-                        <Box my={5}>
-                            <Text fontWeight="bold" fontSize="2xl">
-                                3 Comments
-                            </Text>
+                        {blogCommentsQuery.isSuccess && (
+                            <Box my={5}>
+                                <Text fontWeight="bold" fontSize="2xl">
+                                    {blogCommentsQuery.data?.data?.length} Comments
+                                </Text>
 
-                            <Flex direction="column" gap={3}>
-                                {Array(3)
-                                    .fill(0)
-                                    .map((_, i) => (
-                                        <Flex gap={3} p={3}>
-                                            <Show above="sm">
-                                                <Avatar
-                                                    name="Dan Abrahmov"
-                                                    size="xl"
-                                                    src="https://bit.ly/dan-abramov"
-                                                />
-                                            </Show>
-                                            <Box>
-                                                <Text fontSize="xl" fontWeight="bold" lineHeight="1">
-                                                    Dan Abrahmov
-                                                </Text>
-                                                <Text color="blackAlpha.600">December 4, 2017 at 3:12 pm</Text>
-
-                                                <Text fontSize="md" my="2">
-                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Error eaque
-                                                    aperiam voluptatibus provident repellat praesentium quia, ducimus
-                                                    obcaecati vel suscipit.
-                                                </Text>
-                                            </Box>
-                                        </Flex>
+                                <Flex direction="column" gap={3}>
+                                    {blogCommentsQuery.data?.data?.map((comment) => (
+                                        <BlogComment key={comment.id} {...comment} />
                                     ))}
-                            </Flex>
-                        </Box>
+                                </Flex>
+                            </Box>
+                        )}
 
                         <Box mt={5}>
                             <Text fontWeight="bold" fontSize="2xl">
                                 Post a comment
                             </Text>
-                            <Box as="form" mt={3}>
-                                <Grid
-                                    templateRows="repeat(4, 1fr)"
-                                    templateColumns="repeat(2, 1fr)"
-                                    columnGap={4}
-                                    rowGap={2}
-                                >
-                                    <GridItem
-                                        colSpan={{
-                                            sm: 2,
-                                            md: 1,
-                                        }}
-                                    >
-                                        <FormControl textAlign="left" borderRadius="0rem" isInvalid={false}>
-                                            <FormLabel>First Name</FormLabel>
-                                            <InputGroup bg="gray.50" size="lg">
-                                                <Input type="text" placeholder="Enter your first name" />
-                                            </InputGroup>
-                                            <FormErrorMessage>Field is required</FormErrorMessage>
-                                        </FormControl>
-                                    </GridItem>
-
-                                    <GridItem
-                                        colSpan={{
-                                            sm: 2,
-                                            md: 1,
-                                        }}
-                                    >
-                                        <FormControl textAlign="left" borderRadius="0rem" isInvalid={false}>
-                                            <FormLabel>Last Name</FormLabel>
-                                            <InputGroup bg="gray.50" size="lg">
-                                                <Input type="text" placeholder="Enter your last name" />
-                                            </InputGroup>
-                                            <FormErrorMessage>Field is required</FormErrorMessage>
-                                        </FormControl>
-                                    </GridItem>
-
-                                    <GridItem colSpan={2}>
-                                        <FormControl textAlign="left" borderRadius="0rem" isInvalid={false}>
-                                            <FormLabel>Email</FormLabel>
-                                            <InputGroup bg="gray.50" size="lg">
-                                                <Input type="text" placeholder="Enter your email" />
-                                            </InputGroup>
-                                            <FormErrorMessage>Field is required</FormErrorMessage>
-                                        </FormControl>
-                                    </GridItem>
-
-                                    <GridItem colSpan={2}>
-                                        <FormControl textAlign="left" borderRadius="0rem" isInvalid={false}>
-                                            <FormLabel>Comment</FormLabel>
-                                            <InputGroup bg="gray.50" size="lg">
-                                                <Textarea
-                                                    w="100%"
-                                                    borderRadius="0rem"
-                                                    size="lg"
-                                                    placeholder="Write something..."
-                                                />
-                                            </InputGroup>
-                                            <FormErrorMessage>Field is required</FormErrorMessage>
-                                        </FormControl>
-                                    </GridItem>
-
-                                    <GridItem>
-                                        <Button variant="dark">Post</Button>
-                                    </GridItem>
-                                </Grid>
-                            </Box>
+                            <CommentForm />
                         </Box>
                     </Box>
-
-                    <BlogRightSide showPopular />
-                </SimpleGrid>
+                </BlogPageLayout>
             </Container>
         </Fragment>
     );
