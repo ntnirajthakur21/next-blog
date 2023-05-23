@@ -1,16 +1,16 @@
 import React from 'react';
-import { Image, Flex, Text, Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
+import { Flex, Text, Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { TopBar } from '..';
 import { FaAngleDown } from 'react-icons/fa';
+import Logo from '@/components/SVG/Logo';
 
 const Header = () => {
-    const router = useRouter();
     return (
         <>
             <TopBar />
-            <Flex boxShadow="xs" py={['1rem', '1rem', '1rem', '1rem']} w="100%">
+            <Flex boxShadow="xs" py={['1rem', '1rem', '1rem', '1rem']} w="100%" as="nav">
                 <Flex
                     gap="1rem"
                     direction={['column', 'column', 'column', 'row']}
@@ -22,15 +22,9 @@ const Header = () => {
                     maxWidth="1200px"
                 >
                     <Flex flexDir="column">
-                        <Image
-                            _hover={{ cursor: 'pointer', filter: `brightness(80%)` }}
-                            onClick={() => router.push('/')}
-                            h={['2rem', '4rem', '4rem', '4rem']}
-                            maxH="4rem"
-                            w="auto"
-                            alt="ggvisaaLogo"
-                            src="/logo.png"
-                        />
+                        <Link href="/" passHref>
+                            <Logo />
+                        </Link>
                     </Flex>
 
                     <Flex>
