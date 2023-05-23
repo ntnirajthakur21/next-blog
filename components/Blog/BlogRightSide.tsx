@@ -60,7 +60,7 @@ const BlogRightSide = ({ showPopular = false }: Props) => {
                         {Array(5)
                             .fill(0)
                             .map((_, i) => (
-                                <BlogItemSM key={i} />
+                                <BlogItemSM key={i} id={i + 1} />
                             ))}
                     </Stack>
                 </Box>

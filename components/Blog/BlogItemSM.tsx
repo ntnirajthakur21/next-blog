@@ -5,10 +5,10 @@ import { FaCalendarAlt } from 'react-icons/fa';
 import { Icon } from '@chakra-ui/react';
 import React from 'react';
 
-const BlogItemSM = () => {
+const BlogItemSM = ({ id }: { id: number }) => {
     return (
         <Flex flex={1} bg="secondaryGray.400" gap={3} w="100%" my={2}>
-            <Image src="/blog1.jpg" width={150} height={150} alt="blog 1" />
+            <Image src={`https://picsum.photos/id/${id + 20}/300/300.webp`} width={150} height={150} alt="blog 1" />
             <Box p={3}>
                 <Text
                     fontSize={{
@@ -23,7 +23,7 @@ const BlogItemSM = () => {
                         cursor: 'pointer',
                     }}
                     as={Link}
-                    href="/blog/1"
+                    href={`/blog/${id}`}
                 >
                     Help Finding Information Online is so easy
                 </Text>
