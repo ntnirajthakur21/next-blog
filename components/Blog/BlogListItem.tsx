@@ -3,8 +3,10 @@ import React from 'react';
 import { FaCalendarAlt } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ISingleBlog } from '@/API/blogAPIServices';
+import BlogTags from '@/data/blogTags';
 
-const BlogListItem = () => {
+const BlogListItem = ({ title, body, id }: ISingleBlog) => {
     return (
         <Flex bg="secondaryGray.400" gap={3} w="100%" direction={['column', 'row', 'row', 'row']} height="fit-content">
             <Box
@@ -25,7 +27,7 @@ const BlogListItem = () => {
                 }}
             >
                 <Image
-                    src="/blog1.jpg"
+                    src={`https://picsum.photos/id/${id}/300/300.webp`}
                     layout="fill"
                     objectFit="cover"
                     alt="blog 1"
@@ -35,8 +37,8 @@ const BlogListItem = () => {
                 />
                 <Box className="overlay" position="absolute" top={0} left={0} right={0} bottom={0} bg="#0005">
                     <Flex alignItems="flex-start" height="100%" justifyContent="flex-end" direction="column" p={5}>
-                        <Tag colorScheme="green" size="lg" variant="solid">
-                            Blog
+                        <Tag colorScheme={BlogTags[id % BlogTags.length].color} size="lg" variant="solid">
+                            {BlogTags[id % BlogTags.length].name}
                         </Tag>
                     </Flex>
                 </Box>
@@ -51,10 +53,10 @@ const BlogListItem = () => {
                             cursor: 'pointer',
                         }}
                         as={Link}
-                        href="/blog/1"
+                        href={`/blog/${id}`}
                         passHref
                     >
-                        Lorem ipsum dolor sit amet consectetur
+                        {title.slice(0, 40) + (title.length > 40 ? '...' : '')}
                     </Box>
                 </Box>
 
@@ -65,8 +67,7 @@ const BlogListItem = () => {
                     </Box>
                 </Flex>
                 <Text color="blackAlpha.700" mt={3}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam voluptatum, quibusdam, quia, quod
-                    voluptatem quos voluptas voluptate quas quibusdam quas
+                    {body.slice(0, 200) + (body.length > 200 ? '...' : '')}
                 </Text>
             </Box>
         </Flex>
