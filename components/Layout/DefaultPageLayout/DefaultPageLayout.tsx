@@ -6,7 +6,7 @@ const DefaultPageLayout = ({ children }: { children: ReactNode }): React.JSX.Ele
     return (
         <Flex direction="column" minHeight="100vh">
             <Header />
-            <Flex flex={1} width="100%" flexDirection="column" height="100%">
+            <Flex flex={1} width="100%" flexDirection="column" height="100%" as="main">
                 {children}
             </Flex>
             <Footer />
