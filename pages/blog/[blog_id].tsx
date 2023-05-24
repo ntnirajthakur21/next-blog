@@ -29,7 +29,10 @@ const BlogDetail = () => {
     // Here we are using react-query to fetch the blog content
     const { isSuccess, data } = useQuery(
         ['get-blog-content', blog_id as string],
-        async () => await getSingleBlog(blog_id as string),
+        async () => {
+            console.log('blog id', blog_id);
+            return await getSingleBlog(blog_id as string);
+        },
         {
             // Here we are disabling the query if the blog id is not available
             enabled: blog_id !== undefined && typeof blog_id === 'string',
@@ -38,9 +41,11 @@ const BlogDetail = () => {
 
     // Here we are prefetching the data for the next page
     useEffect(() => {
-        queryClient.prefetchQuery(['get-blog-content', blog_id as string]);
-        queryClient.prefetchQuery(['get-blog-comments', blog_id as string]);
-    }, [router]);
+        if (blog_id !== undefined && typeof blog_id === 'string') {
+            queryClient.prefetchQuery(['get-blog-content', blog_id as string]);
+            queryClient.prefetchQuery(['get-blog-comments', blog_id as string]);
+        }
+    }, [blog_id]);
 
     return (
         <Fragment>
